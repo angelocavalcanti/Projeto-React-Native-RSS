@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Linking, Button, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Linking, Image } from 'react-native';
 import { FlatList} from 'react-native-gesture-handler';
 import { Context as FeedListContext } from '../context/FeedListContext'
 import { Context as FeedContext } from '../context/FeedContext'
@@ -32,6 +32,8 @@ const ShowFeedScreen = ({ route, navigation }) => {
                     //atualmente só exibe o título, faça com que apareça data de publicação, descrição (pode cortar em 100 ou 200 caracteres para não ficar muito grande), e imagem (caso tenha)
                     //ao clicar em uma notícia, devemos chamar a função abrirLink que direciona o usuário para o link da notícia
                     let descricao = item.descricao ? item.descricao.slice(0,220) : '';
+                    // console.log("DESCRIÇÃO="+descricao);
+                    // console.log(item);
                     return (
                         <View style={styles.row}>
                             <TouchableOpacity onPress={() => abrirLink(item.link) }>
@@ -95,7 +97,7 @@ const styles = StyleSheet.create({
     dataPublicacao: {
         fontSize: 12,
         fontStyle: 'italic',
-        textAlign: 'right'
+        textAlign: 'left'
     },
     icon: {
         fontSize: 24

@@ -1,10 +1,9 @@
 import { StackRouter } from '@react-navigation/native';
 import createDataContext from './createDataContext';
-import {View, StyleSheet, Button, Alert} from 'react-native';
+import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-// ANGELO ABAIXO ===========================================
 const saveFeeds = async (feeds) => { 
     try {
         await AsyncStorage.setItem('feeds', JSON.stringify(feeds));
@@ -23,7 +22,6 @@ const clearStorage = async () => {
         alert('Falha ao limpar feeds');
     }
 }
-// ANGELO ACIMA ==============================================
 
 const feedListReducer = (state, action) => {
     let newState = [];
@@ -96,7 +94,7 @@ const restoreState = dispatch => async () => {
     catch(e) { 
         console.log(e);
     }
-  };
+};
 
 
 const deleteAll = dispatch => {
@@ -118,41 +116,41 @@ const deleteAll = dispatch => {
     }
 }
 
-const rssFeeds = [
-    {
-        titulo: 'G1 - Todas as notícias',
-        urlFeed: 'https://g1.globo.com/rss/g1/',
-        descricao: '',
-        urlSite: '',
-        urlImagem: ''
-    },
-    {
-        titulo: 'G1 - Brasil',
-        urlFeed: 'https://g1.globo.com/rss/g1/brasil/',
-        descricao: '',
-        urlSite: '',
-        urlImagem: ''
-    },
-    {
-        titulo: 'G1 - Tecnologia e Games',
-        urlFeed: 'https://g1.globo.com/rss/g1/tecnologia/',
-        descricao: '',
-        urlSite: '',
-        urlImagem: ''
-    },
-    {
-        titulo: 'Jovem Nerd',
-        urlFeed: 'http://jovemnerd.com.br/rss',
-        descricao: 'testando',
-        urlSite: 'google.com',
-        urlImagem: ''
-    }
+// const rssFeeds = [
+//     {
+//         titulo: 'G1 - Todas as notícias',
+//         urlFeed: 'https://g1.globo.com/rss/g1/',
+//         descricao: '',
+//         urlSite: '',
+//         urlImagem: ''
+//     },
+//     {
+//         titulo: 'G1 - Brasil',
+//         urlFeed: 'https://g1.globo.com/rss/g1/brasil/',
+//         descricao: '',
+//         urlSite: '',
+//         urlImagem: ''
+//     },
+//     {
+//         titulo: 'G1 - Tecnologia e Games',
+//         urlFeed: 'https://g1.globo.com/rss/g1/tecnologia/',
+//         descricao: '',
+//         urlSite: '',
+//         urlImagem: ''
+//     },
+//     {
+//         titulo: 'Jovem Nerd',
+//         urlFeed: 'http://jovemnerd.com.br/rss',
+//         descricao: 'testando',
+//         urlSite: 'google.com',
+//         urlImagem: ''
+//     }
     
-];
+// ];
 
 export const { Context, Provider } = createDataContext(
     feedListReducer,
     { addFeed, deleteFeed, restoreState, deleteAll },
-    // []
-     rssFeeds
+    //  rssFeeds
+    [] // inicia os feeds com uma lista vazia
 );

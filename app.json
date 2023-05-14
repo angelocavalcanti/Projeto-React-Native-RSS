@@ -20,13 +20,17 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff",
-        "package": "com.cin.AGFeeds",
-        "versionCode": 1
-      }
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.aggc.agfeeds"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "2a70b91c-4bc3-471f-a028-7251bc169487"
+      }
     }
   }
 }
