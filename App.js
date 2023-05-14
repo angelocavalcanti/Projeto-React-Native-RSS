@@ -19,8 +19,13 @@ const App = () => {
         component={IndexScreen} 
         options={({navigation}) => ({
           headerRight: () => (
-            <TouchableOpacity onPress={() => console.log('implementar')}>
-              <Feather name="plus" size={30} />
+            // Para deixar o ícone como "botão" clicável e ao clicar carrega a tela de adição de feed:
+            <TouchableOpacity onPress={() => {
+              console.log('implementado ícone de adição');
+              navigation.navigate("Add"); // chama AddFeedScreen
+            }}>
+              {/* Ícone + para adicionar feed: */}
+              <Feather name="plus" size={30} /> 
             </TouchableOpacity>
           )
         })

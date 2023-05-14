@@ -1,30 +1,41 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Button } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useContext } from 'react';
 import { Context } from '../context/FeedListContext'
 
 const IndexScreen = ({ navigation }) => {
-    const { state } = useContext(Context);
+    const { state, deleteFeed, deleteAll , restoreState} = useContext(Context);
+
+    useEffect(() => {
+        restoreState();
+      }, []);
 
     return (
         <>
-            <FlatList
+            {state != null && state != "" ? 
+            <View>
+                <FlatList
                 data={state}
                 keyExtractor={(rssfeed) => rssfeed.urlFeed}
                 renderItem={({ item }) => {
                     return (
                         <TouchableOpacity onPress={() => navigation.navigate('Show', { id: item.urlFeed })}>
                             <View style={styles.row}>
-                                <Text style={styles.title}>{item.titulo}</Text>
-                                <TouchableOpacity onPress={() => { console.log('implementar'); }}>
+                            <Text style={styles.title}>{item.titulo}</Text>
+                                <TouchableOpacity onPress={() => { 
+                                    console.log('delete_feed IndexScreen implementado');
+                                    deleteFeed(item.urlFeed);
+                                }}>
                                     <Feather style={styles.icon} name="trash" />
                                 </TouchableOpacity>
                             </View>
                         </TouchableOpacity>
                     );
                 }}
-            />
+            /> 
+            <Button title="Apagar tudo" onPress={()=>deleteAll()} />
+            </View> : <View style={styles.vazio}><Text style={styles.vazio}>Nenhum Feeds RSS cadastrado</Text></View>}
         </>
     );
 };
@@ -43,6 +54,12 @@ const styles = StyleSheet.create({
     },
     icon: {
         fontSize: 24
+    },
+    vazio:{
+        fontSize: 25,
+        padding: 10,
+        width:'100%',
+        textAlign:'center'
     }
 });
 

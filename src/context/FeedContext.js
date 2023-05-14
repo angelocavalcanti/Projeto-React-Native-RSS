@@ -1,26 +1,35 @@
 import createDataContext from './createDataContext';
 import { XMLParser } from 'fast-xml-parser';
 import rssfeed from '../api/rssfeed';
+import { useEffect } from 'react';
 
 
 const feedReducer = (state, action) => {
     let newState = [];
     switch (action.type) {
         case 'fetch_items':
-            console.log('implementar');
-            return state;
+            console.log('implementado retorna a lista de feeds');
+            // return state;
+            return action.payload;
         case 'add_item':
-            console.log('implementar');
-            return state;
+            console.log('implementado');
+            // return state;
+            return [...state, {
+                titulo: action.payload.titulo, 
+                link:action.payload.urlFeed
+            }];
         case 'delete_item':
-            console.log('implementar');
-            return state;
+            console.log('implementado exclusão feedContext.js');
+            // return state;
+            return state.filter((rssItems) => rssItems.id != action.payload);
         case 'restore_state':
-            console.log('implementar');
-            return state;
+            console.log('implementado-retorna estado');
+            // return state;
+            return action.payload;
         case 'delete_all':
-            console.log('implementar');
-            return state;
+            console.log('implementado - retorna vazio');
+            // return state;
+            return [];
         default:
             return state;
     }
@@ -28,26 +37,74 @@ const feedReducer = (state, action) => {
 
 const addItem = dispatch => {
     return (titulo, urlFeed, callback) => {
-        console.log('implementar');
+        console.log('implementado adicionar feed');
+        dispatch({ type: 'add_item', payload: { titulo, urlFeed } })
+        if(callback){
+            callback(); // função passada como argumento (pode ser uma função que carrega outra tela)
+        }
     };
 };
 
 const deleteItem = dispatch => {
     return (id) => {
         console.log('implementar');
+        dispatch({ type: 'delete_item', payload: id });
     };
 };
 
-const fetchItems = dispatch => async (feedURL) => {
+const fetchItems = dispatch => async (feedURL) => { // rodando de forma assíncrona
     const parser = new XMLParser();
     const fetch = rssfeed(feedURL);
     const response = await fetch.get();
     const data = response.data;
     let feed = await parser.parse(response.data);
     // console.log(feed.rss.channel.language);//linguagem do RSS feed
-    //console.log(feed.rss.channel.item);//todos os itens do feed - notícias
+    // console.log(feed.rss.channel.item);//todos os itens do feed - notícias
+console.log("FEED ===== "+feed.rss.channel.item[0]);
+    console.log('implementado');
+    let itens = []; // array criado para salvar todas os itens (as notícias) do feed
+    let qntFeeds = feed.rss.channel.item.length < 50 ? feed.rss.channel.item.length : 50; // carrega no máximo 50 feeds na tela
+    for (let i=0; i < qntFeeds; i++) {
+        let item = feed.rss.channel.item[i];
 
-    console.log('implementar');
+        const regex = /<media:content[^>]+url="([^">]+)/g;
+
+        const match = data.match(regex);
+
+        let imageUrl = '';
+        if(match) {
+            imageUrl = match[i]
+        }
+        if (imageUrl !== '' && imageUrl !== undefined) {
+            imageUrl = imageUrl.replace(/.*?(https:\/\/)/, 'https://');
+        }
+        if (item.description == undefined) {
+            descricao = item.description.replace(/<[^>]+>/g, '');
+        }
+        else {
+            descricao = ''
+        }
+
+        // itens = [...itens, {
+        //     titulo: item.title,
+        //     link: item.link,
+        //     descricao: item.description,
+        //     imagem: item.image, // ANGELO VERIFICAR
+        //     dataPublicacao: item.description.pubDate
+        // }]
+    
+        itens = [...itens, {
+            titulo: item.title,
+            link: item.link,
+            descricao: descricao,
+            imagem: imageUrl,
+            dataPublicacao: item.pubDate
+        }]
+    }
+    // console.log("=================================================");
+    // console.log("=================================================");
+    // console.log(feed.rss.channel.item.length);
+    dispatch({ type: 'fetch_items', payload:itens });
 };
 
 const restoreState = dispatch => async () => {
@@ -59,7 +116,7 @@ const restoreState = dispatch => async () => {
 
 const deleteAll = dispatch => {
     return () => {
-        console.log('implementar');
+        console.log('implementado-retorna vazio');
     }
 }
 
@@ -90,5 +147,6 @@ const rssItems = [
 export const { Context, Provider } = createDataContext(
     feedReducer,
     { addItem, deleteItem, fetchItems, restoreState, deleteAll },
-    rssItems
+    // rssItems
+    []
 );
